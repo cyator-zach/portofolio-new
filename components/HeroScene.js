@@ -3,21 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const DEFAULT_SKILLS = [
-  "Node.js", "Express", "REST API", "PostgreSQL", "MongoDB", "Docker",
-  "Redis", "GraphQL", "Microservices", "CI/CD", "AWS", "Linux",
-  "Git", "TypeScript", "Python", "System Design"
-];
-
 export default function HeroScene({
-  skills = DEFAULT_SKILLS,
+  skills = [],
   activeSkill = "",
   onSelectSkill = () => {},
   whatsappUrl = "https://wa.me/62895600366624"
 }) {
-  const displaySkills = Array.isArray(skills) && skills.length > 0
-    ? skills.map(s => typeof s === "object" ? s.name : s)
-    : DEFAULT_SKILLS;
+  const displaySkills = skills.map(s => typeof s === "object" ? s.name : s);
 
   return (
     <div className="relative min-h-[100dvh] bg-white text-neutral-950 flex flex-col justify-between overflow-hidden">

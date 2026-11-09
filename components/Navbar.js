@@ -6,13 +6,13 @@ import { GitHubIcon, LinkedInIcon, InstagramIcon, EmailIcon, WhatsAppIcon } from
 
 const DEFAULT_NAV_ITEMS = [
   { label: "Beranda", href: "/" },
-  { label: "Pendekatan Belajar & Karir", href: "#learning-approach" },
+  { label: "Riwayat Pekerjaan", href: "#experience" },
   { label: "Proyek & Repositori", href: "#repositories" },
-  { label: "Artikel & Publikasi", href: "#articles" },
+  { label: "FAQ", href: "#faq" },
   { label: "Portal Admin", href: "/login" },
 ];
 
-export default function Navbar({ items = DEFAULT_NAV_ITEMS }) {
+export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -99,19 +99,19 @@ export default function Navbar({ items = DEFAULT_NAV_ITEMS }) {
         {/* Drawer Bottom Bar: Social Icons & Contact */}
         <div className="w-full max-w-[1400px] mx-auto border-t border-neutral-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-neutral-600">
           <div className="flex items-center gap-6">
-            <a href="https://github.com/cyator-zach" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="GitHub">
+            <a href={configs.github_url || "https://github.com/cyator-zach"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="GitHub">
               <GitHubIcon className="w-5 h-5" theme="light" />
             </a>
-            <a href="https://www.linkedin.com/in/zulfikar-achyar-79b15b257/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="LinkedIn">
+            <a href={configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="LinkedIn">
               <LinkedInIcon className="w-5 h-5" />
             </a>
-            <a href="https://www.instagram.com/zulfikar_achyar/" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="Instagram">
+            <a href={configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="Instagram">
               <InstagramIcon className="w-5 h-5" />
             </a>
-            <a href="mailto:zulfikaerachyar@gmail.com" className="hover:opacity-75 transition-opacity" title="Email">
+            <a href={configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com"} className="hover:opacity-75 transition-opacity" title="Email">
               <EmailIcon className="w-5 h-5" />
             </a>
-            <a href="https://wa.me/62895600366624" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="WhatsApp">
+            <a href={configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="WhatsApp">
               <WhatsAppIcon className="w-5 h-5" />
             </a>
           </div>

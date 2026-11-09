@@ -7,17 +7,16 @@ export default function ArticlesSection({
   onSelectArticle = () => {},
 }) {
   return (
-    <section id="articles" className="w-full bg-[#f8fafc] font-sans py-16 sm:py-20 lg:py-24 px-4 sm:px-8 md:px-12 lg:px-16 border-t border-neutral-200 scroll-mt-6">
+    <section id="articles" className="relative w-full bg-[#f8fafc] font-sans py-16 sm:py-20 lg:py-24 px-4 sm:px-8 md:px-12 lg:px-16 border-t border-neutral-200 scroll-mt-6 overflow-hidden">
+      {/* Abstract Modern Background */}
+      <div className="absolute top-1/3 -right-20 w-80 h-80 bg-[#1b44ff]/5 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="max-w-[1400px] mx-auto space-y-10">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-neutral-200">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#1b44ff] font-mono">
-              RISET & PUBLIKASI TEKNIK
-            </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-neutral-950 tracking-tight mt-1.5">
-              Artikel & Jurnal Ilmiah<span className="text-[#1b44ff]">.</span>
+              Artikel & <span className="font-serif italic font-normal text-[#1b44ff]">Jurnal Ilmiah</span>.
             </h2>
             <p className="mt-3 text-xs sm:text-sm text-neutral-600 max-w-2xl font-normal leading-relaxed">
               Kajian mendalam tentang optimasi sistem, IoT embedded, dan arsitektur data yang dipublikasikan secara akademik dan profesional.

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { GitHubIcon, LinkedInIcon, InstagramIcon, EmailIcon, WhatsAppIcon } from "./SocialIcons";
 
-export default function Footer() {
+export default function Footer({ configs = {} }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -44,8 +44,8 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <a href="#learning-approach" className="text-neutral-400 hover:text-white transition-colors">
-                  Pendekatan Belajar & Karir
+                <a href="#experience" className="text-neutral-400 hover:text-white transition-colors">
+                  Riwayat Pekerjaan
                 </a>
               </li>
               <li>
@@ -54,8 +54,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#articles" className="text-neutral-400 hover:text-white transition-colors">
-                  Artikel & Publikasi
+                <a href="#faq" className="text-neutral-400 hover:text-white transition-colors">
+                  FAQ
                 </a>
               </li>
               <li>
@@ -74,7 +74,7 @@ export default function Footer() {
             <ul className="space-y-3 text-xs sm:text-sm">
               <li>
                 <a
-                  href="https://github.com/cyator-zach"
+                  href={configs.github_url || "https://github.com/cyator-zach"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
@@ -85,7 +85,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.linkedin.com/in/zulfikar-achyar-79b15b257/"
+                  href={configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
@@ -96,7 +96,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com/zulfikar_achyar/"
+                  href={configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
@@ -107,7 +107,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:zulfikaerachyar@gmail.com"
+                  href={configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com"}
                   className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
                 >
                   <EmailIcon className="w-4 h-4" />
@@ -116,7 +116,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://wa.me/62895600366624"
+                  href={configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"

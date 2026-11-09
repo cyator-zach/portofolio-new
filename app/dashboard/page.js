@@ -193,6 +193,8 @@ export default function DashboardPage() {
     const [articles, setArticles] = useState([]);
     const [experiences, setExperiences] = useState([]);
     const [skills, setSkills] = useState([]);
+    const [faqs, setFaqs] = useState([]);
+    const [configs, setConfigs] = useState({});
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
@@ -256,13 +258,17 @@ export default function DashboardPage() {
             fetchJson("/api/experience"),
             fetchJson("/api/skill"),
             fetchJson("/api/category"),
+            fetchJson("/api/faq"),
+            fetchJson("/api/config"),
         ])
-            .then(([p, a, e, s, c]) => {
+            .then(([p, a, e, s, c, f, cfg]) => {
                 setProjects(p.data || []);
                 setArticles(a.data || []);
                 setExperiences(e.data || []);
                 setSkills(s.data || []);
                 setCategories(c.data || []);
+                setFaqs(f.data || []);
+                setConfigs(cfg.data || {});
             })
             .finally(() => setLoading(false));
     }
@@ -292,11 +298,15 @@ export default function DashboardPage() {
         setSelectedId(null);
         setSlugManuallyEdited(false);
         setEditorTab("write");
-        setFormData(
-            sectionKey === "project" || sectionKey === "article"
-                ? { category_id: categories[0]?.id || "", is_published: true, is_featured: false }
-                : {}
-        );
+        if (sectionKey === "config") {
+            setFormData({ ...configs });
+        } else if (sectionKey === "faq") {
+            setFormData({ question: "", answer: "", order_index: faqs.length + 1 });
+        } else if (sectionKey === "project" || sectionKey === "article") {
+            setFormData({ category_id: categories[0]?.id || "", is_published: true, is_featured: false });
+        } else {
+            setFormData({});
+        }
     }
 
     function handleSelectItem(item) {
@@ -402,6 +412,32 @@ export default function DashboardPage() {
             setErrorModal("Harap lengkapi Skill Name!");
             return;
         }
+        if (activeSection === "faq" && (!formData.question || !formData.answer)) {
+            setErrorModal("Harap lengkapi Pertanyaan dan Jawaban FAQ!");
+            return;
+        }
+
+        if (activeSection === "config") {
+            setSubmitting(true);
+            try {
+                const res = await fetch("/api/config", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+                if (res.status === 401) return router.push("/login");
+                const json = await res.json();
+                if (res.ok) {
+                    setConfigs(json.data || {});
+                    loadData();
+                } else {
+                    setErrorModal(json.message || "Gagal menyimpan kontak");
+                }
+            } finally {
+                setSubmitting(false);
+            }
+            return;
+        }
 
         setSubmitting(true);
 
@@ -451,8 +487,11 @@ export default function DashboardPage() {
         if (activeSection === "skill") {
             return skills.filter((i) => i.name?.toLowerCase().includes(q));
         }
+        if (activeSection === "faq") {
+            return faqs.filter((i) => i.question?.toLowerCase().includes(q) || i.answer?.toLowerCase().includes(q));
+        }
         return [];
-    }, [activeSection, projects, articles, experiences, skills, searchQuery]);
+    }, [activeSection, projects, articles, experiences, skills, faqs, searchQuery]);
 
     const contentModules = [
         { key: "overview", label: "Overview", count: null },
@@ -460,6 +499,8 @@ export default function DashboardPage() {
         { key: "article", label: "Articles", count: articles.length },
         { key: "experience", label: "Experiences", count: experiences.length },
         { key: "skill", label: "Skills", count: skills.length },
+        { key: "faq", label: "FAQ", count: faqs.length },
+        { key: "config", label: "Kontak & Sosial", count: null },
     ];
 
     return (
@@ -1004,9 +1045,96 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
                                     )}
+
+                                    {/* Form FAQ */}
+                                    {activeSection === "faq" && (
+                                        <div className="space-y-4">
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-zinc-800">Pertanyaan (Question)</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={formData.question || ""}
+                                                    onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+                                                    placeholder="Tuliskan pertanyaan di sini..."
+                                                    className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-zinc-800">Jawaban (Answer)</label>
+                                                <textarea
+                                                    required
+                                                    rows={4}
+                                                    value={formData.answer || ""}
+                                                    onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+                                                    placeholder="Tuliskan jawaban lengkap di sini..."
+                                                    className="w-full rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white p-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d] resize-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Form Kontak & Sosial */}
+                                    {activeSection === "config" && (
+                                        <div className="space-y-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-xs font-semibold text-zinc-800">Nomor WhatsApp (Cth: 62895600366624)</label>
+                                                    <input
+                                                        type="text"
+                                                        value={formData.whatsapp_number || ""}
+                                                        onChange={(e) => setFormData({ ...formData, whatsapp_number: e.target.value })}
+                                                        placeholder="62895600366624"
+                                                        className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                    />
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-xs font-semibold text-zinc-800">Email Address</label>
+                                                    <input
+                                                        type="email"
+                                                        value={formData.email_address || ""}
+                                                        onChange={(e) => setFormData({ ...formData, email_address: e.target.value })}
+                                                        placeholder="name@example.com"
+                                                        className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-zinc-800">GitHub URL</label>
+                                                <input
+                                                    type="url"
+                                                    value={formData.github_url || ""}
+                                                    onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+                                                    placeholder="https://github.com/username"
+                                                    className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-zinc-800">LinkedIn URL</label>
+                                                <input
+                                                    type="url"
+                                                    value={formData.linkedin_url || ""}
+                                                    onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+                                                    placeholder="https://www.linkedin.com/in/..."
+                                                    className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-semibold text-zinc-800">Instagram URL</label>
+                                                <input
+                                                    type="url"
+                                                    value={formData.instagram_url || ""}
+                                                    onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
+                                                    placeholder="https://www.instagram.com/..."
+                                                    className="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/70 focus:bg-white px-3 text-[13px] text-zinc-900 outline-none focus:border-[#f7941d]"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Daftar Item Tersimpan (Mirip "Partner Company Logos" pills/list di bagian bawah referensi) */}
+                                {activeSection !== "config" && (
                                 <div className="space-y-2.5 pt-2">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-xs font-semibold text-zinc-700 capitalize">
@@ -1018,8 +1146,8 @@ export default function DashboardPage() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                         {currentList.map((item) => {
                                             const isSelected = selectedId === item.id;
-                                            const title = item.title || item.company_name || item.name;
-                                            const sub = item.slug ? `/${item.slug}` : item.role_title || "Active Skill";
+                                            const title = item.title || item.company_name || item.name || item.question;
+                                            const sub = item.slug ? `/${item.slug}` : item.role_title || (item.answer ? item.answer.slice(0, 45) + "..." : "Active Item");
 
                                             return (
                                                 <div
@@ -1073,6 +1201,7 @@ export default function DashboardPage() {
                                         </button>
                                     </div>
                                 </div>
+                                )}
                             </>
                         )}
                     </>
@@ -1424,6 +1553,19 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                 )}
+
+                                {/* FAQ Order Index di Inspector Kanan */}
+                                {activeSection === "faq" && (
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] text-zinc-500 font-medium">Urutan Tampil (Order Index)</label>
+                                        <input
+                                            type="number"
+                                            value={formData.order_index ?? 0}
+                                            onChange={(e) => setFormData({ ...formData, order_index: Number(e.target.value) })}
+                                            className="w-full h-9 rounded-lg border border-zinc-200 bg-white px-3 text-[13px] text-zinc-800 outline-none focus:border-[#f7941d]"
+                                        />
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -1439,6 +1581,8 @@ export default function DashboardPage() {
                             >
                                 {submitting
                                     ? "Saving..."
+                                    : activeSection === "config"
+                                    ? "Simpan Pengaturan Kontak"
                                     : selectedId
                                     ? `Update ${activeSection}`
                                     : `Create ${activeSection}`}
