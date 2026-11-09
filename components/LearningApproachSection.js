@@ -49,9 +49,9 @@ export default function LearningApproachSection({
           <div className="lg:col-span-8 flex flex-col justify-between bg-white rounded-2xl sm:rounded-3xl border border-neutral-200 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
             {/* Header: Title */}
             <div className="p-6 sm:p-8 lg:p-10 border-b border-neutral-200">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-neutral-950 tracking-tight leading-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-950 tracking-tight leading-tight">
                 Arsitektur Sistem &{" "}
-                <span className="text-[#1b44ff]">{subtitleHighlight}</span>.
+                <span className="font-serif italic font-normal text-[#1b44ff]">{subtitleHighlight}</span>.
               </h2>
             </div>
 

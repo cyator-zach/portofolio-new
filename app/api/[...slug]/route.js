@@ -4,12 +4,22 @@ import * as article from "@/controllers/article";
 import * as experience from "@/controllers/experience";
 import * as skill from "@/controllers/skill";
 import * as category from "@/controllers/category";
+import * as faq from "@/controllers/faq";
+import * as config from "@/controllers/config";
 import * as auth from "@/controllers/auth";
 import * as upload from "@/controllers/upload";
 
 const router = new Router();
 
 router.get("/category", category.getCategory);
+
+router.get("/faq", faq.getFaq);
+router.post("/faq", faq.createFaq);
+router.put("/faq", faq.updateFaq);
+router.delete("/faq", faq.deleteFaq);
+
+router.get("/config", config.getConfig);
+router.put("/config", config.updateConfig);
 
 router.get("/project", project.getProject);
 router.post("/project", project.createProject);
