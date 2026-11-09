@@ -1,0 +1,11 @@
+# Zulfikar - Junior Backend Developer Portfolio
+> Portfolio personal Zulfikar, Junior Backend Developer yang berfokus pada arsitektur scalable systems, database optimization, cloud, dan modern backend engineering.
+
+## Informasi Utama
+- Nama: Zulfikar
+- Peran: Junior Backend Developer
+- Keahlian Utama: Backend Development, Cloud & DevOps, REST APIs, Microservices, Next.js, Node.js, Python.
+- Visi: Building scalable systems, solving real problems, and exploring the future of technology.
+
+## Tautan
+- [Beranda](https://zulfikar.dev): Hero section dan ringkasan profil Zulfikar.
