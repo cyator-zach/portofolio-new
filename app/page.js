@@ -7,6 +7,7 @@ import ExperienceSection from "@/components/ExperienceSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
+import { api } from "@/services/api";
 
 export default function HomePage() {
   const [projects, setProjects] = useState([]);
@@ -17,18 +18,12 @@ export default function HomePage() {
   const [activeSkill, setActiveSkill] = useState("");
 
   useEffect(() => {
-    Promise.all([
-      fetch("/api/project").then((r) => r.json()).catch(() => ({ data: [] })),
-      fetch("/api/experience").then((r) => r.json()).catch(() => ({ data: [] })),
-      fetch("/api/skill").then((r) => r.json()).catch(() => ({ data: [] })),
-      fetch("/api/faq").then((r) => r.json()).catch(() => ({ data: [] })),
-      fetch("/api/config").then((r) => r.json()).catch(() => ({ data: {} })),
-    ]).then(([p, e, s, f, c]) => {
-      setProjects(p.data || []);
-      setExperiences(e.data || []);
-      setSkills(s.data || []);
-      setFaqs(f.data || []);
-      setConfigs(c.data || {});
+    api.getPortfolioData().then((data) => {
+      setProjects(data.projects);
+      setExperiences(data.experiences);
+      setSkills(data.skills);
+      setFaqs(data.faqs);
+      setConfigs(data.configs);
     });
   }, []);
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { api } from "@/services/api";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -16,17 +17,11 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const res = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const json = await res.json();
+            const res = await api.login(email, password);
             if (res.ok) {
                 router.push("/dashboard");
             } else {
-                setError(json.message || "Invalid credentials");
+                setError(res.message || "Invalid credentials");
             }
         } catch (err) {
             setError("Gagal terhubung ke server");

@@ -14,6 +14,15 @@ const DEFAULT_NAV_ITEMS = [
 
 export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
   const [isOpen, setIsOpen] = useState(false);
+  const lastUpdated = configs.last_updated || "2026-11-10";
+
+  const socials = [
+    { title: "GitHub", href: configs.github_url || "https://github.com/cyator-zach", icon: <GitHubIcon className="w-5 h-5" theme="light" /> },
+    { title: "LinkedIn", href: configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/", icon: <LinkedInIcon className="w-5 h-5" /> },
+    { title: "Instagram", href: configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/", icon: <InstagramIcon className="w-5 h-5" /> },
+    { title: "Email", href: configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com", icon: <EmailIcon className="w-5 h-5" /> },
+    { title: "WhatsApp", href: configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624", icon: <WhatsAppIcon className="w-5 h-5" /> },
+  ];
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -34,13 +43,20 @@ export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
     <>
       {/* ===================== MAIN HEADER BAR ===================== */}
       <header className="anim-nav-drop w-full px-5 sm:px-12 md:px-16 py-3 sm:py-4 md:py-5 flex items-center justify-between z-50 shrink-0 relative bg-white/90 backdrop-blur-md">
-        <Link
-          href="/"
-          onClick={() => setIsOpen(false)}
-          className="text-xl sm:text-2xl font-black tracking-tight text-neutral-950 hover:opacity-80 transition-opacity"
-        >
-          ZULFIKAR ACHYAR<span className="text-[#1b44ff]">.</span>
-        </Link>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <Link
+            href="/"
+            onClick={() => setIsOpen(false)}
+            className="text-xl sm:text-2xl font-black tracking-tight text-neutral-950 hover:opacity-80 transition-opacity"
+          >
+            ZULFIKAR ACHYAR<span className="text-[#1b44ff]">.</span>
+          </Link>
+
+          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-neutral-500 bg-neutral-100/90 border border-neutral-200/80 px-2.5 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Last updated: <time dateTime={lastUpdated}>{lastUpdated}</time></span>
+          </div>
+        </div>
 
         {/* Minimal 2-Line Hamburger Menu Toggle */}
         <button
@@ -99,21 +115,18 @@ export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
         {/* Drawer Bottom Bar: Social Icons & Contact */}
         <div className="w-full max-w-[1400px] mx-auto border-t border-neutral-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-neutral-600">
           <div className="flex items-center gap-6">
-            <a href={configs.github_url || "https://github.com/cyator-zach"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="GitHub">
-              <GitHubIcon className="w-5 h-5" theme="light" />
-            </a>
-            <a href={configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="LinkedIn">
-              <LinkedInIcon className="w-5 h-5" />
-            </a>
-            <a href={configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="Instagram">
-              <InstagramIcon className="w-5 h-5" />
-            </a>
-            <a href={configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com"} className="hover:opacity-75 transition-opacity" title="Email">
-              <EmailIcon className="w-5 h-5" />
-            </a>
-            <a href={configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624"} target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity" title="WhatsApp">
-              <WhatsAppIcon className="w-5 h-5" />
-            </a>
+            {socials.map((s) => (
+              <a
+                key={s.title}
+                href={s.href}
+                target={s.title !== "Email" ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                className="hover:opacity-75 transition-opacity"
+                title={s.title}
+              >
+                {s.icon}
+              </a>
+            ))}
           </div>
 
           <p className="text-neutral-400 text-[11px]">
