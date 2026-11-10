@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import ExperiencePopover from "@/components/ExperiencePopover";
+import ExperienceMobileCard from "@/components/ExperienceMobileCard";
 
 export default function ExperienceSection({ experiences = [] }) {
   const [selectedExp, setSelectedExp] = useState(null);
@@ -49,30 +50,25 @@ export default function ExperienceSection({ experiences = [] }) {
               Jejak langkah profesional dari infrastruktur jaringan lapangan, integrasi sistem tertanam, hingga arsitektur backend berkeamanan tinggi.
             </p>
           </div>
-
-
         </div>
 
-        {/* ==================== WAVY ROAD TIMELINE ==================== */}
+        {/* Wavy Road Timeline Desktop */}
         <div className="relative w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-8">
           <div className="min-w-[960px] lg:min-w-[1100px] relative h-[500px] flex items-center justify-center select-none">
             
-            {/* SVG Winding Road Track (Dihasilkan Dinamis) */}
+            {/* SVG Winding Road Track */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none"
               viewBox="0 0 1000 380"
               preserveAspectRatio="none"
               fill="none"
             >
-              {/* Outer Border */}
               <path d={roadPath} stroke="#27272a" strokeWidth="28" strokeLinecap="round" fill="none" />
-              {/* Asphalt Road Core */}
               <path d={roadPath} stroke="#09090b" strokeWidth="24" strokeLinecap="round" fill="none" />
-              {/* Dashed White Highway Lane Divider */}
               <path d={roadPath} stroke="#ffffff" strokeWidth="2.5" strokeDasharray="9 9" fill="none" opacity="0.9" />
             </svg>
 
-            {/* Milestones: Pin Badges & Cards Dinamis dari DB */}
+            {/* Milestones: Pin Badges & Cars */}
             {points.map((exp, idx) => {
               const year = exp.start_date ? exp.start_date.slice(0, 4) : "-";
 
@@ -86,7 +82,7 @@ export default function ExperienceSection({ experiences = [] }) {
                     transform: "translate(-50%, -50%)",
                   }}
                 >
-                  {/* Mobil langsung di atas jalan */}
+                  {/* Mobil Icon */}
                   <button
                     type="button"
                     onClick={() => setSelectedExp(selectedExp?.id === exp.id ? null : exp)}
@@ -101,7 +97,7 @@ export default function ExperienceSection({ experiences = [] }) {
                     />
                   </button>
 
-                  {/* Milestone Info (Alternating Top and Bottom) */}
+                  {/* Milestone Info */}
                   <div
                     onClick={() => setSelectedExp(selectedExp?.id === exp.id ? null : exp)}
                     className={`absolute z-30 w-60 sm:w-72 text-center cursor-pointer group transition-transform duration-200 hover:scale-105 ${
@@ -121,59 +117,9 @@ export default function ExperienceSection({ experiences = [] }) {
                     </p>
                   </div>
 
-                  {/* Floating Speech Bubble Popover (Menempel Langsung di Mobil) */}
+                  {/* Floating Speech Bubble Popover */}
                   {selectedExp?.id === exp.id && (
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className={`absolute z-50 w-72 sm:w-80 p-4 rounded-2xl bg-white border border-neutral-900 shadow-2xl transition-all duration-200 -translate-x-1/2 left-1/2 ${
-                        exp.isTop ? "top-12 sm:top-14" : "bottom-12 sm:bottom-14"
-                      }`}
-                    >
-                      {/* Triangle Pointer / Speech Bubble Arrow */}
-                      <div
-                        className={`absolute left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent ${
-                          exp.isTop
-                            ? "-top-2 border-b-8 border-b-neutral-900"
-                            : "-bottom-2 border-t-8 border-t-neutral-900"
-                        }`}
-                      />
-
-                      <div className="flex items-start justify-between gap-2 pb-2 border-b border-neutral-100">
-                        <div className="pr-2">
-                          <h4 className="text-xs font-bold text-neutral-950 uppercase tracking-wider leading-snug">
-                            {exp.role_title}
-                          </h4>
-                          <span className="text-[10px] font-mono text-[#1b44ff] font-semibold mt-0.5 block">
-                            {exp.start_date?.slice(0, 7)} — {exp.end_date ? exp.end_date.slice(0, 7) : "Present"}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedExp(null)}
-                          className="p-1 rounded-md text-neutral-400 hover:text-neutral-950 hover:bg-neutral-100 transition-colors cursor-pointer shrink-0"
-                          title="Tutup"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-
-                      <div className="mt-2.5 space-y-1.5 text-left">
-                        {exp.description ? (
-                          exp.description.split("\n").slice(0, 3).map((line, lIdx) => {
-                            const cleanLine = line.replace(/^[•\-\*]\s*/, "").trim();
-                            if (!cleanLine) return null;
-                            return (
-                              <div key={lIdx} className="flex items-start gap-2 text-[11px] text-neutral-700 leading-relaxed">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#1b44ff] shrink-0 mt-1.5" />
-                                <span>{cleanLine}</span>
-                              </div>
-                            );
-                          })
-                        ) : (
-                          <p className="text-[11px] text-neutral-400 italic">Rincian kontribusi aktif.</p>
-                        )}
-                      </div>
-                    </div>
+                    <ExperiencePopover exp={exp} onClose={() => setSelectedExp(null)} />
                   )}
                 </div>
               );
@@ -184,50 +130,14 @@ export default function ExperienceSection({ experiences = [] }) {
 
         {/* Mobile Fallback Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:hidden pt-4">
-          {items.map((exp) => {
-            const isSelected = selectedExp?.id === exp.id;
-            return (
-              <div
-                key={exp.id}
-                onClick={() => setSelectedExp(isSelected ? null : exp)}
-                className="p-5 rounded-2xl border border-neutral-200 bg-neutral-50/50 hover:bg-white hover:border-[#1b44ff] transition-all cursor-pointer shadow-xs space-y-2 group"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-serif italic font-normal text-xl text-neutral-950">
-                    {exp.start_date?.slice(0, 4)}
-                  </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-[#1b44ff] font-bold">
-                    {isSelected ? "Tutup ▲" : "Detail ↗"}
-                  </span>
-                </div>
-                <h4 className="text-sm font-bold text-neutral-900 uppercase tracking-wider group-hover:text-[#1b44ff] transition-colors">
-                  {exp.role_title}
-                </h4>
-                <p className="text-xs text-neutral-600 font-medium">
-                  {exp.company_name}
-                </p>
-
-                {isSelected && (
-                  <div className="pt-3 border-t border-neutral-200 space-y-1.5 text-left">
-                    {exp.description ? (
-                      exp.description.split("\n").slice(0, 3).map((line, lIdx) => {
-                        const cleanLine = line.replace(/^[•\-\*]\s*/, "").trim();
-                        if (!cleanLine) return null;
-                        return (
-                          <div key={lIdx} className="flex items-start gap-2 text-xs text-neutral-700">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1b44ff] shrink-0 mt-1.5" />
-                            <span>{cleanLine}</span>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <p className="text-xs text-neutral-400 italic">Rincian kontribusi aktif.</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {items.map((exp) => (
+            <ExperienceMobileCard
+              key={exp.id}
+              exp={exp}
+              isSelected={selectedExp?.id === exp.id}
+              onToggle={() => setSelectedExp(selectedExp?.id === exp.id ? null : exp)}
+            />
+          ))}
         </div>
 
       </div>

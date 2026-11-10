@@ -1,11 +1,16 @@
-# Zulfikar - Junior Backend Developer Portfolio
-> Portfolio personal Zulfikar, Junior Backend Developer yang berfokus pada arsitektur scalable systems, database optimization, cloud, dan modern backend engineering.
+# Zulfikar Achyar - Backend & Software Engineer Portfolio
+> Personal portfolio of Zulfikar Achyar, Backend & Software Engineer specializing in scalable backend systems, database optimization, IoT integrations, and modern web architectures.
 
-## Informasi Utama
-- Nama: Zulfikar
-- Peran: Junior Backend Developer
-- Keahlian Utama: Backend Development, Cloud & DevOps, REST APIs, Microservices, Next.js, Node.js, Python.
-- Visi: Building scalable systems, solving real problems, and exploring the future of technology.
+## Core Information
+- Name: Zulfikar Achyar
+- Role: Backend & Software Engineer
+- Core Skills: Node.js, Next.js, PostgreSQL, REST APIs, Microservices, IoT Systems, MQTT.
+- Website: https://zulfikarachyar.my.id
+- GitHub: https://github.com/cyator-zach
+- LinkedIn: https://www.linkedin.com/in/zulfikar-achyar-79b15b257/
 
-## Tautan
-- [Beranda](https://zulfikar.dev): Hero section dan ringkasan profil Zulfikar.
+## Main Sections
+- [Home](https://zulfikarachyar.my.id): Hero stage and professional overview.
+- [Experience](https://zulfikarachyar.my.id/#experience): Work history and engineering roles.
+- [Projects](https://zulfikarachyar.my.id/#repositories): Open-source repositories and applications.
+- [FAQ](https://zulfikarachyar.my.id/#faq): Frequently asked questions regarding engineering and collaborations.

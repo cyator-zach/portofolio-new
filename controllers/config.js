@@ -39,3 +39,19 @@ export async function updateConfig(req) {
     return resSuccess(configMap);
 }
 
+export async function touchLastUpdated() {
+    const today = new Date().toISOString().slice(0, 10);
+    const existing = await db("sys_app_config").where({ config_key: "last_updated" }).first();
+    if (existing) {
+        await db("sys_app_config")
+            .where({ config_key: "last_updated" })
+            .update({ config_value: today, updated_at: db.fn.now() });
+    } else {
+        await db("sys_app_config").insert({
+            id: crypto.randomUUID(),
+            config_key: "last_updated",
+            config_value: today,
+        });
+    }
+}
+

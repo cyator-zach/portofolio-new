@@ -47,5 +47,11 @@ router.post("/auth/login", auth.login);
 router.post("/auth/refresh", auth.refresh);
 router.post("/auth/logout", auth.logout);
 
-const handle = (req, { params }) => router.handle(req, params);
+const handle = async (req, { params }) => {
+    const res = await router.handle(req, params);
+    if (req.method !== "GET" && !req.url.includes("/auth/") && res.status < 400) {
+        config.touchLastUpdated().catch(() => {});
+    }
+    return res;
+};
 export { handle as GET, handle as POST, handle as PUT, handle as DELETE };

@@ -9,15 +9,13 @@ export default function HeroScene({
   onSelectSkill = () => {},
   whatsappUrl = "https://wa.me/62895600366624"
 }) {
-  const displaySkills = skills.map(s => typeof s === "object" ? s.name : s);
 
   return (
     <div className="relative min-h-[100dvh] bg-white text-neutral-950 flex flex-col justify-between overflow-hidden">
       {/* ===================== HERO MAIN STAGE (Editorial Layered Typography & Portrait) ===================== */}
       <div className="relative flex-1 flex flex-col items-center justify-center w-full px-3 sm:px-8 md:px-12 -mt-8 xs:-mt-12 sm:-mt-8 md:-mt-10 select-none overflow-hidden bg-white">
-        
-        {/* Layer 1: Background Typography Stage */}
-        <div className="w-full max-w-[1500px] mx-auto relative flex flex-col items-center justify-center select-none pointer-events-none cursor-default py-0 z-0" aria-hidden="true">
+        {/* Layer 1: Background Typography Stage (Main Semantic H1) */}
+        <h1 aria-label="Zulfikar Achyar — Backend & Software Engineer" className="w-full max-w-[1500px] mx-auto relative flex flex-col items-center justify-center select-none pointer-events-none cursor-default py-0 z-0 font-normal m-0">
           
           {/* Top Italic Serif Text ("I'm junior") */}
           <div className="w-full flex items-center justify-center gap-36 xs:gap-44 sm:gap-40 md:gap-52 lg:gap-64 -mb-1.5 xs:-mb-3 sm:-mb-8 md:-mb-12 lg:-mb-16">
@@ -92,7 +90,7 @@ export default function HeroScene({
               developer
             </span>
           </div>
-        </div>
+        </h1>
 
         {/* Layer 2: Monochrome Portrait & Action Button */}
         <div className="anim-portrait absolute inset-x-0 bottom-0 flex flex-col items-center justify-end z-10 pointer-events-none">
@@ -100,7 +98,7 @@ export default function HeroScene({
             <div className="relative w-full h-full filter drop-shadow-[-12px_4px_18px_rgba(15,23,42,0.28)] sm:drop-shadow-[-16px_4px_22px_rgba(15,23,42,0.32)] drop-shadow-[12px_4px_18px_rgba(15,23,42,0.28)] sm:drop-shadow-[16px_4px_22px_rgba(15,23,42,0.32)] drop-shadow-[0_15px_30px_rgba(0,0,0,0.12)]">
               <Image
                 src="/zulfikar_bw_hq.png"
-                alt="Zulfikar Achyar - Junior Backend Developer"
+                alt="Zulfikar Achyar - Backend & Software Engineer"
                 width={960}
                 height={1116}
                 quality={100}
@@ -196,44 +194,42 @@ export default function HeroScene({
         </div>
       </div>
 
-      {/* ===================== SKILL TAGS BAR (Interactive Horizontal Carousel) ===================== */}
+      {/* ===================== SKILL TAGS BAR ===================== */}
       <div id="skills" className="anim-footer-right w-full border-t border-neutral-200 z-20 shrink-0 bg-white">
-        <div className="relative w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex items-center gap-3 sm:gap-4 px-5 sm:px-12 md:px-16 py-3 sm:py-4 md:py-5 w-max">
+        <div className="relative w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-3 px-5 sm:px-12 py-3 sm:py-4 w-max">
             <button
               type="button"
               onClick={() => {
                 onSelectSkill("");
                 document.getElementById("repositories")?.scrollIntoView({ behavior: "smooth" });
               }}
-              className={`inline-flex items-center gap-2 px-6 sm:px-7 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap cursor-pointer transition-colors duration-200 ${
+              className={`px-5 py-2 rounded-full text-xs font-semibold cursor-pointer transition-colors ${
                 !activeSkill ? "bg-[#1b44ff] text-white" : "bg-neutral-900 text-white hover:bg-[#1b44ff]"
               }`}
             >
-              <svg className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.518-4.674z" />
-              </svg>
               Semua Stack
             </button>
-
-            {displaySkills.map((tag) => (
-              <button
-                type="button"
-                key={tag}
-                onClick={() => {
-                  onSelectSkill(activeSkill === tag ? "" : tag);
-                  document.getElementById("repositories")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className={`inline-flex items-center px-6 sm:px-7 py-2.5 sm:py-3 rounded-full border text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap cursor-pointer transition-all duration-200 ${
-                  activeSkill === tag
-                    ? "bg-[#1b44ff] text-white border-[#1b44ff] shadow-md"
-                    : "border-neutral-300 text-neutral-700 hover:border-[#1b44ff] hover:text-[#1b44ff] hover:bg-blue-50/50"
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-            <span className="w-8 shrink-0" aria-hidden="true" />
+            {skills.map((s) => {
+              const tag = typeof s === "object" ? s.name : s;
+              return (
+                <button
+                  type="button"
+                  key={tag}
+                  onClick={() => {
+                    onSelectSkill(activeSkill === tag ? "" : tag);
+                    document.getElementById("repositories")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className={`px-5 py-2 rounded-full border text-xs font-medium cursor-pointer transition-all ${
+                    activeSkill === tag
+                      ? "bg-[#1b44ff] text-white border-[#1b44ff]"
+                      : "border-neutral-300 text-neutral-700 hover:border-[#1b44ff] hover:text-[#1b44ff]"
+                  }`}
+                >
+                  {tag}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

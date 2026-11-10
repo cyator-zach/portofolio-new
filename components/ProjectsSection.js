@@ -17,35 +17,17 @@ export default function ProjectsSection({
     }
   };
 
-  // Normalise database projects
-  const rawList = projects.map(p => {
-    const parts = p.description?.includes(". ") ? p.description.split(". ") : null;
-    const stackFromDesc = parts && parts[0].includes(",") ? parts[0].split(", ") : null;
-    return {
-      id: String(p.id),
-      name: p.title || p.name,
-      fullName: p.repo_url?.replace("https://github.com/", "") || `cyator-zach/${p.slug || p.title?.toLowerCase().replace(/\s+/g, "-")}`,
-      category: p.category_name || (p.is_featured ? "Featured" : "Backend API"),
-      description: stackFromDesc ? parts.slice(1).join(". ") : p.description,
-      language: "JavaScript",
-      stack: p.tech_stack ? (Array.isArray(p.tech_stack) ? p.tech_stack : p.tech_stack.split(",")) : (stackFromDesc || ["Node.js", "PostgreSQL"]),
-      cloneUrl: p.repo_url ? `${p.repo_url}.git` : `https://github.com/cyator-zach/${p.slug || "project"}.git`,
-      githubUrl: p.repo_url || "https://github.com/cyator-zach",
-      demoUrl: p.demo_url,
-      thumbnailUrl: p.thumbnail_url,
-      featured: Boolean(p.is_featured),
-    };
-  });
+  const categories = ["Semua", ...new Set(projects.map((p) => p.category_name).filter(Boolean))];
 
-  // Filter categories
-  const categories = ["Semua", ...new Set(rawList.map(r => r.category).filter(Boolean))];
-
-  const filtered = rawList.filter(repo => {
-    const matchCategory = selectedCategory === "Semua" || repo.category === selectedCategory;
-    const matchKeyword = !filterKeyword || 
-      repo.name.toLowerCase().includes(filterKeyword.toLowerCase()) ||
+  const filtered = projects.filter((repo) => {
+    const matchCategory = selectedCategory === "Semua" || repo.category_name === selectedCategory;
+    const matchKeyword =
+      !filterKeyword ||
+      repo.title?.toLowerCase().includes(filterKeyword.toLowerCase()) ||
       repo.description?.toLowerCase().includes(filterKeyword.toLowerCase()) ||
-      repo.stack?.some(s => s.toLowerCase().includes(filterKeyword.toLowerCase()));
+      (Array.isArray(repo.tech_stack) ? repo.tech_stack.join(" ") : repo.tech_stack || "")
+        .toLowerCase()
+        .includes(filterKeyword.toLowerCase());
     return matchCategory && matchKeyword;
   });
 
@@ -126,17 +108,16 @@ export default function ProjectsSection({
           {filtered.map((repo) => (
             <a
               key={repo.id}
-              href={repo.demoUrl || repo.githubUrl}
+              href={repo.demo_url || repo.repo_url}
               target="_blank"
               rel="noopener noreferrer"
               className="group w-[280px] sm:w-[340px] md:w-[380px] shrink-0 flex flex-col cursor-pointer"
             >
-              {/* Visual Preview Box */}
               <div className="aspect-[4/3] w-full rounded-2xl border border-neutral-200 bg-neutral-100 overflow-hidden relative group-hover:border-neutral-900 transition-all duration-300 shadow-xs group-hover:shadow-lg flex items-center justify-center">
-                {repo.thumbnailUrl ? (
+                {repo.thumbnail_url ? (
                   <img
-                    src={repo.thumbnailUrl}
-                    alt={repo.name}
+                    src={repo.thumbnail_url}
+                    alt={repo.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
@@ -146,20 +127,16 @@ export default function ProjectsSection({
                       <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                       <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
-
                     <div className="flex items-center justify-end z-10">
                       <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-[#1b44ff] transition-colors" />
                     </div>
-
                     <div className="absolute inset-0 opacity-15 [background-image:radial-gradient(#000_1px,transparent_1px)] [background-size:14px_14px] pointer-events-none" />
                   </div>
                 )}
               </div>
-
-              {/* Title & Underline Arrow Link Only */}
               <div className="mt-3.5">
                 <span className="inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-neutral-950 underline underline-offset-4 decoration-neutral-300 group-hover:decoration-[#1b44ff] group-hover:text-[#1b44ff] transition-colors leading-snug">
-                  {repo.name} →
+                  {repo.title} →
                 </span>
               </div>
             </a>

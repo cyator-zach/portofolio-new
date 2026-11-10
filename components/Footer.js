@@ -8,6 +8,22 @@ export default function Footer({ configs = {} }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const navLinks = [
+    { label: "Beranda", onClick: scrollToTop },
+    { label: "Riwayat Pekerjaan", href: "#experience" },
+    { label: "Open Source Repositories", href: "#repositories" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Portal Admin", href: "/login", isSpecial: true },
+  ];
+
+  const socials = [
+    { label: "GitHub", href: configs.github_url || "https://github.com/cyator-zach", icon: <GitHubIcon className="w-4 h-4" theme="dark" /> },
+    { label: "LinkedIn", href: configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/", icon: <LinkedInIcon className="w-4 h-4" /> },
+    { label: "Instagram", href: configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/", icon: <InstagramIcon className="w-4 h-4" /> },
+    { label: "Email", href: configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com", icon: <EmailIcon className="w-4 h-4" /> },
+    { label: "WhatsApp", href: configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624", icon: <WhatsAppIcon className="w-4 h-4" /> },
+  ];
+
   return (
     <footer className="w-full bg-neutral-950 text-white font-sans border-t border-neutral-900 pt-16 sm:pt-20 pb-12 sm:pb-16 px-4 sm:px-8 md:px-12 lg:px-16">
       <div className="max-w-[1400px] mx-auto">
@@ -23,7 +39,7 @@ export default function Footer({ configs = {} }) {
                 ZULFIKAR ACHYAR<span className="text-[#1b44ff]">.</span>
               </Link>
               <p className="mt-3 text-xs sm:text-sm text-neutral-400 font-normal max-w-md leading-relaxed">
-                Junior Backend Developer yang berfokus pada arsitektur sistem berkonkurensi tinggi, optimalisasi database, dan skalabilitas microservices.
+                {configs.site_description || "Software Engineer & Backend Specialist yang berfokus pada arsitektur sistem berkonkurensi tinggi, optimalisasi database, dan transmisi data terenkripsi."}
               </p>
             </div>
           </div>
@@ -34,35 +50,30 @@ export default function Footer({ configs = {} }) {
               Navigasi
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>
-                <button
-                  type="button"
-                  onClick={scrollToTop}
-                  className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
-                >
-                  Beranda
-                </button>
-              </li>
-              <li>
-                <a href="#experience" className="text-neutral-400 hover:text-white transition-colors">
-                  Riwayat Pekerjaan
-                </a>
-              </li>
-              <li>
-                <a href="#repositories" className="text-neutral-400 hover:text-white transition-colors">
-                  Open Source Repositories
-                </a>
-              </li>
-              <li>
-                <a href="#faq" className="text-neutral-400 hover:text-white transition-colors">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="/login" className="text-neutral-400 hover:text-[#1b44ff] transition-colors">
-                  Portal Admin
-                </a>
-              </li>
+              {navLinks.map((item) => (
+                <li key={item.label}>
+                  {item.onClick ? (
+                    <button
+                      type="button"
+                      onClick={item.onClick}
+                      className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                    >
+                      {item.label}
+                    </button>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className={`transition-colors ${
+                        item.isSpecial
+                          ? "text-neutral-400 hover:text-[#1b44ff]"
+                          : "text-neutral-400 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -72,59 +83,19 @@ export default function Footer({ configs = {} }) {
               Terhubung
             </h3>
             <ul className="space-y-3 text-xs sm:text-sm">
-              <li>
-                <a
-                  href={configs.github_url || "https://github.com/cyator-zach"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
-                >
-                  <GitHubIcon className="w-4 h-4" theme="dark" />
-                  <span>GitHub</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={configs.linkedin_url || "https://www.linkedin.com/in/zulfikar-achyar-79b15b257/"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
-                >
-                  <LinkedInIcon className="w-4 h-4" />
-                  <span>LinkedIn</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={configs.instagram_url || "https://www.instagram.com/zulfikar_achyar/"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
-                >
-                  <InstagramIcon className="w-4 h-4" />
-                  <span>Instagram</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={configs.email_address ? `mailto:${configs.email_address}` : "mailto:zulfikaerachyar@gmail.com"}
-                  className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
-                >
-                  <EmailIcon className="w-4 h-4" />
-                  <span>Email</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={configs.whatsapp_number ? `https://wa.me/${configs.whatsapp_number}` : "https://wa.me/62895600366624"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
-                >
-                  <WhatsAppIcon className="w-4 h-4" />
-                  <span>WhatsApp</span>
-                </a>
-              </li>
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2.5 text-neutral-400 hover:text-white transition-colors"
+                  >
+                    {s.icon}
+                    <span>{s.label}</span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
