@@ -115,24 +115,37 @@ export default function ProjectsSection({
             >
               <div className="aspect-[4/3] w-full rounded-2xl border border-neutral-200 bg-neutral-100 overflow-hidden relative group-hover:border-neutral-900 transition-all duration-300 shadow-xs group-hover:shadow-lg flex items-center justify-center">
                 {repo.thumbnail_url ? (
-                  <img
-                    src={repo.thumbnail_url}
-                    alt={repo.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <>
+                    <img
+                      src={repo.thumbnail_url}
+                      alt={repo.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/20 pointer-events-none" />
+                  </>
                 ) : (
-                  <div className="w-full h-full rounded-2xl bg-gradient-to-br from-neutral-50 to-neutral-100/90 p-5 flex flex-col justify-between border border-neutral-200/60 relative overflow-hidden">
-                    <div className="flex items-center gap-1.5 z-10">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                    </div>
-                    <div className="flex items-center justify-end z-10">
-                      <ArrowUpRight className="w-4 h-4 text-neutral-400 group-hover:text-[#1b44ff] transition-colors" />
-                    </div>
+                  <div className="w-full h-full rounded-2xl bg-gradient-to-br from-neutral-50 to-neutral-100/90 relative overflow-hidden">
                     <div className="absolute inset-0 opacity-15 [background-image:radial-gradient(#000_1px,transparent_1px)] [background-size:14px_14px] pointer-events-none" />
                   </div>
                 )}
+
+                {/* macOS 3 Dots */}
+                <div className={`absolute top-4 left-4 flex items-center gap-1.5 z-10 ${
+                  repo.thumbnail_url ? "drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] bg-black/25 backdrop-blur-xs px-2 py-1 rounded-full border border-white/15" : ""
+                }`}>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                </div>
+
+                {/* Arrow Link Icon */}
+                <div className={`absolute bottom-4 right-4 z-10 ${
+                  repo.thumbnail_url ? "drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] bg-black/25 backdrop-blur-xs p-1.5 rounded-full border border-white/15" : ""
+                }`}>
+                  <ArrowUpRight className={`w-4 h-4 transition-colors ${
+                    repo.thumbnail_url ? "text-white group-hover:text-[#1b44ff]" : "text-neutral-400 group-hover:text-[#1b44ff]"
+                  }`} />
+                </div>
               </div>
               <div className="mt-3.5">
                 <span className="inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-neutral-950 underline underline-offset-4 decoration-neutral-300 group-hover:decoration-[#1b44ff] group-hover:text-[#1b44ff] transition-colors leading-snug">
