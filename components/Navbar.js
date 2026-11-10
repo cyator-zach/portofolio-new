@@ -14,7 +14,6 @@ const DEFAULT_NAV_ITEMS = [
 
 export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
   const [isOpen, setIsOpen] = useState(false);
-  const lastUpdated = configs.last_updated || "2026-11-10";
 
   const socials = [
     { title: "GitHub", href: configs.github_url || "https://github.com/cyator-zach", icon: <GitHubIcon className="w-5 h-5" theme="light" /> },
@@ -43,20 +42,13 @@ export default function Navbar({ items = DEFAULT_NAV_ITEMS, configs = {} }) {
     <>
       {/* ===================== MAIN HEADER BAR ===================== */}
       <header className="anim-nav-drop w-full px-5 sm:px-12 md:px-16 py-3 sm:py-4 md:py-5 flex items-center justify-between z-50 shrink-0 relative bg-white/90 backdrop-blur-md">
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Link
-            href="/"
-            onClick={() => setIsOpen(false)}
-            className="text-xl sm:text-2xl font-black tracking-tight text-neutral-950 hover:opacity-80 transition-opacity"
-          >
-            ZULFIKAR ACHYAR<span className="text-[#1b44ff]">.</span>
-          </Link>
-
-          <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-neutral-500 bg-neutral-100/90 border border-neutral-200/80 px-2.5 py-1 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Last updated: <time dateTime={lastUpdated}>{lastUpdated}</time></span>
-          </div>
-        </div>
+        <Link
+          href="/"
+          onClick={() => setIsOpen(false)}
+          className="text-xl sm:text-2xl font-black tracking-tight text-neutral-950 hover:opacity-80 transition-opacity"
+        >
+          ZULFIKAR ACHYAR<span className="text-[#1b44ff]">.</span>
+        </Link>
 
         {/* Minimal 2-Line Hamburger Menu Toggle */}
         <button
